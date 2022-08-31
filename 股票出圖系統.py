@@ -82,6 +82,7 @@ datas=[data for data in datas]
 df_stockname=pd.DataFrame(datas,columns=['symbol','name'])
 con.close()
 
+# 爬蟲函數
 def getSoupWithChrome(url,path='c:/webdriver/chromedriver',hide=False):  
     option=webdriver.ChromeOptions()     
     if hide:        
@@ -115,7 +116,7 @@ symbol=[]
 day=''
 name=""     
 
-
+# 取得勾選資料
 def Radiobutton_event(widget):
     global output
     choice  = radioValue.get()
@@ -123,6 +124,7 @@ def Radiobutton_event(widget):
         output=widget['text']
     return  output
 
+# 股票檢測
 def choose_stock():
     global output,symbol
     a = entry1.get()
@@ -135,12 +137,14 @@ def choose_stock():
         var.set(symbol)
     else:
         tkinter.messagebox.showerror(title = "錯誤", message = '資料庫無此號股票') 
-        
+
+# 清除股票
 def Clearstock():
     global symbol,day
     symbol=[]
     var.set(symbol)
 
+# 刪除股票
 def Delstock():
     global symbol
     try:
@@ -148,7 +152,8 @@ def Delstock():
         var.set(symbol)
     except:
         tkinter.messagebox.showerror(title = "錯誤", message = '無股票') 
-    
+
+# 顯示股票圖
 def show():
     global symbol,day
     try:
@@ -164,7 +169,8 @@ def show():
     for code in symbol:
         draw(code,day)
         plt.show()
-        
+
+# 製圖股票圖
 def draw(code,day):
     global name
     prices = yf.download(
@@ -185,6 +191,7 @@ def draw(code,day):
     plt.bar(prices.index,prices['Volume'])
     plt.title(f'{code}_Volume',fontsize=16)
 
+# 產生股票圖檔
 def save():
     global path,name,day,symbol
     path=entry3.get()
@@ -204,6 +211,9 @@ def save():
         except:
             tkinter.messagebox.showerror(title = "錯誤", message = '地址輸入錯誤') 
 
+
+
+# tkinter 模板
 window = tk.Tk()
 radioValue = tk.IntVar() 
 var = tk.StringVar()
@@ -211,6 +221,7 @@ var = tk.StringVar()
 window.title('window')
 window.geometry('300x300')
 # 標示文字
+
 label1 = tk.Label(window, text = '股票號數(最多四張,一次只能輸入一張)')
 label2 = tk.Label(window, text = '註:如果空值顯示今日成交量前十股票')
 entry1 = tk.Entry(window) # 輸入欄位的寬度
@@ -227,6 +238,8 @@ label5 = tk.Label(window, text = '存圖位置')
 entry3 = tk.Entry(window)
 button5 = tk.Button(window, text = "存圖", command =save,width =30)
 
+
+# 刻位置
 label1.pack()
 label2.pack()
 entry1.pack()
